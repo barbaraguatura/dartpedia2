@@ -6,9 +6,18 @@ const version = '0.0.1'; // Global
 
 // // Método Principal
 void main(List<String> arguments) async {
-  var runner = CommandRunner();
-  await runner.run(arguments);
-
+ var commandRunner = CommandRunner(
+  onError:(Object error){
+    if (error is Error){
+      throw error;
+    }
+    if (error is Exception){
+      print(error);
+    }
+  }
+ )..addCommand(HelpCommand());
+ commandRunner.run(arguments);
+ }
 //   if(arguments.isEmpty){
 //     printUsage();
 //   } else if (arguments.first == 'version'){
@@ -20,7 +29,7 @@ void main(List<String> arguments) async {
 //    }else {
 //   printUsage(); }
 // 
-}
+
 
 void printUsage(){
   print("Comandos Válidos: 'help', 'version', 'search <ARTICLE-TITLE'");
